@@ -2,7 +2,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-budget = int(input("Enter preferred budget: "))
+budget = None
 
 expenses = []
 
