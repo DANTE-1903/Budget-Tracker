@@ -69,18 +69,18 @@
             <body>
                 <div class="glass-container">
                     <h1>Expense Tracker</h1>
-                    <div class="remaining">Remaining: {budget}</div>
+                    <div class="remaining">Remaining: {{budget}}</div>
                     <form method="POST">
                         <input type="text" name="item" placeholder="Expense name" required>
                         <input type="number" name="cost" placeholder="Cost" required>
                         <button type="submit">Add Expense</button>
                     </form>
-                    <div class="error">{error_message}</div>
+                    <div class="error">{{error_message}}</div>
                 </div>
 
                 <div class="glass-container">
                     <h3 style="margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">EXPENSE HISTORY</h3>
-                    <div>{formatted_history}</div>
+                    <div>{{formatted_history}}</div>
                 </div>
             </body>
         </html>
