@@ -28,7 +28,10 @@ def home():
             else:
                 session["error_message"] = ""
                 session["budget"] = session["budget"] - cost
-                session["expenses"].append(f"{item} - {cost}")
+
+                temp_expenses = session["expenses"]
+                temp_expenses.append(f"{item}-{cost}")
+                session["expenses"] = temp_expenses
 
     formatted_history = "<br>".join(session["expenses"])
 
