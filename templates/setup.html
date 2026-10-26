@@ -1,0 +1,67 @@
+    <html>
+                <head>
+                    <title>Set Budget</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            background: linear-gradient(135deg, #1f4068, #162447, #1b1b2f);
+                            height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            color: #fff;
+                        }
+                        .glass-container {
+                            background: rgba(255, 255, 255, 0.05);
+                            backdrop-filter: blur(12px);
+                            -webkit-backdrop-filter: blur(12px);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            border-radius: 16px;
+                            padding: 30px;
+                            width: 350px;
+                            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+                            box-sizing: border-box;
+                        }
+                        h1 {
+                            text-align: center;
+                            font-size: 24px;
+                            margin-bottom: 20px;
+                        }
+                        input {
+                            width: 100%;
+                            padding: 12px;
+                            margin: 10px 0;
+                            background: rgba(255, 255, 255, 0.07);
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            border-radius: 8px;
+                            color: #fff;
+                            font-size: 15px;
+                            box-sizing: border-box;
+                        }
+                        button {
+                            width: 100%;
+                            padding: 12px;
+                            margin-top: 10px;
+                            background: #00b4d8;
+                            border: none;
+                            border-radius: 8px;
+                            color: #fff;
+                            font-weight: bold;
+                            font-size: 15px;
+                            cursor: pointer;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="glass-container">
+                        <h1>Set Your Budget</h1>
+                        <form method="POST">
+                            <input type="number" name="budget" placeholder="Enter starting budget" required>
+                            <button type="submit">Start Tracking</button>
+                        </form>
+                    </div>
+                </body>
+            </html>
