@@ -24,7 +24,7 @@
                 width: 350px;
                 box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 box-sizing: border-box;
-                z-index: 1; /* Keeps the form cleanly above the ticker */
+                z-index: 1;
             }
             h1 {
                 text-align: center;
@@ -55,7 +55,7 @@
                 cursor: pointer;
             }
 
-            /* --- TICKER CSS --- */
+            /* --- FULL-SCREEN MULTI-ROW TICKER CSS --- */
             .ticker-wrap {
                 position: fixed;
                 top: 0;
@@ -65,34 +65,56 @@
                 overflow: hidden;
                 z-index: -1;
                 display: flex;
-                align-items: center;
-                opacity: 0.04;
+                flex-direction: column;
+                justify-content: space-around;
+                opacity: 0.03;
                 pointer-events: none;
             }
 
-            .ticker-text {
-                display: inline-block;
+            .ticker-row {
+                display: flex;
                 white-space: nowrap;
-                font-size: 10vw;
+                font-size: 8vw;
                 font-weight: bold;
                 text-transform: uppercase;
-                animation: scrollText 20s linear infinite;
             }
 
-            @keyframes scrollText {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-50%);
-                }
+            .row-1 .ticker-text {
+                display: inline-block;
+                animation: scrollLeft 25s linear infinite;
+            }
+
+            .row-2 .ticker-text {
+                display: inline-block;
+                animation: scrollRight 25s linear infinite;
+            }
+
+            @keyframes scrollLeft {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+
+            @keyframes scrollRight {
+                0% { transform: translateX(-50%); }
+                100% { transform: translateX(0); }
             }
         </style>
     </head>
     <body>
-        <!-- --- TICKER HTML --- -->
+        <!-- --- FULL-SCREEN BACKGROUND TICKER --- -->
         <div class="ticker-wrap">
-            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • </div>
+            <div class="ticker-row row-1">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
+            <div class="ticker-row row-2">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
+            <div class="ticker-row row-1">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
         </div>
 
         <div class="glass-container">
