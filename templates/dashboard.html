@@ -7,7 +7,7 @@
                 margin: 0;
                 padding: 20px;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #1f4068, #02247a, #0000f9);
+                background: linear-gradient(135deg, #1f4068, #02247a, #12128c);
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
@@ -28,13 +28,19 @@
                 box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 box-sizing: border-box;
                 z-index: 1;
+                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3 ease;
+            }
+            .glass-container:hover {
+                transform: translateY(-5px);
+                border-color: rgba(0, 240, 255, 0.4);
+                box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.15);
             }
             h1, h3 {
                 text-align: center;
             }
             .remaining {
                 text-align: center;
-                color: #3700ff;
+                color: #391d9d;
                 font-weight: bold;
                 margin-bottom: 20px;
             }
@@ -61,14 +67,28 @@
                 font-size: 15px;
                 cursor: pointer;
             }
+            button:hover {
+                background: #0096c7;
+            }
+            .reset-btn {
+                background: #ff6b6b;
+            }
+            .reset-btn:hover {
+                background: #fa5252;
+            }
             .error {
                 color: #ff6b6b;
                 text-align: center;
                 font-size: 14px;
                 margin-top: 10px;
             }
-
-            /* --- FULL-SCREEN MULTI-ROW TICKER CSS --- */
+            .exhausted-banner {
+                color: #ff6b6b;
+                text-align: center;
+                font-weight: bold;
+                margin-bottom: 15px;
+                font-size: 16px;
+            }
             .ticker-wrap {
                 position: fixed;
                 top: 0;
@@ -114,7 +134,6 @@
         </style>
     </head>
     <body>
-        <!-- --- FULL-SCREEN BACKGROUND TICKER --- -->
         <div class="ticker-wrap">
             <div class="ticker-row row-1">
                 <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
@@ -129,21 +148,34 @@
                 <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
             </div>
         </div>
-
+        {% if is_exhausted %}
+        <div class="glass-container">
+            <h1>Budget Exhausted!</h1>
+            <div class="exhausted-banner">You've spent all your funds. Here is your final summary:</div>
+            <div style="margin-bottom: 20px; line-height: 1.6;">{{ formatted_history | safe }}</div>
+            <form action="/reset" method="GET">
+                <button type="submit" class="reset-btn">Start New Budget</button>
+            </form>
+        </div>
+        {% else %}
         <div class="glass-container">
             <h1>Expense Tracker</h1>
-            <div class="remaining">Remaining: {{budget}}</div>
+            <div class="remaining">Remaining: ₦{{ budget }}</div>
             <form method="POST">
                 <input type="text" name="item" placeholder="Expense name" required>
                 <input type="number" name="cost" placeholder="Cost" required>
                 <button type="submit">Add Expense</button>
             </form>
-            <div class="error">{{error_message}}</div>
+            <div class="error">{{ error_message }}</div>
         </div>
 
         <div class="glass-container">
             <h3 style="margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">EXPENSE HISTORY</h3>
-            <div>{{formatted_history}}</div>
+            <div style="margin-bottom: 15px; line-height: 1.6;">{{ formatted_history | safe }}</div>
+            <form action="/reset" method="GET">
+                <button type="submit" class="reset-btn">Reset Budget</button>
+            </form>
         </div>
+        {% endif %}
     </body>
 </html>

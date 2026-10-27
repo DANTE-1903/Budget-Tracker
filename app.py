@@ -41,7 +41,8 @@ def home():
         return render_template("dashboard.html",
                                 budget = session["budget"],
                                 error_message = session ["error_message"],
-                                formatted_history=formatted_history)
+                                formatted_history=formatted_history,
+                                is_exhausted=(session["budget"] == 0))
 
 @app.route("/reset")
 def reset():
