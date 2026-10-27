@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, session  #import flask to run the web server and 'request' to catch form data sent by the user
+from flask import Flask, request, render_template, session, redirect #import flask to run the web server and 'request' to catch form data sent by the user
 
 app = Flask(__name__) #initialize flask application
 
@@ -42,6 +42,11 @@ def home():
                                 budget = session["budget"],
                                 error_message = session ["error_message"],
                                 formatted_history=formatted_history)
+
+@app.route("/reset")
+def reset():
+    session.clear()
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
