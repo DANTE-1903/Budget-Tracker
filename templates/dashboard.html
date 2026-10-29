@@ -28,7 +28,7 @@
                 box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
                 box-sizing: border-box;
                 z-index: 1;
-                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3 ease;
+                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             }
             .glass-container:hover {
                 transform: translateY(-5px);
@@ -75,6 +75,28 @@
             }
             .reset-btn:hover {
                 background: #fa5252;
+            }
+            .logout-btn {
+                display: block;
+                width: 100%;
+                padding: 12px;
+                margin-top: 10px;
+                text-align: center;
+                color: #ff6b6b;
+                text-decoration: none;
+                border: 1px solid rgba(255, 107, 107, 0.4);
+                border-radius: 8px;
+                background: rgba(255, 255, 255, 0.05);
+                font-weight: bold;
+                font-size: 15px;
+                box-sizing: border-box;
+                transition: all 0.3s ease;
+            }
+            .logout-btn:hover {
+                border-color: #ff4757;
+                box-shadow: 0 0 12px rgba(255, 71, 87, 0.4);
+                background: rgba(255, 71, 87, 0.15);
+                color: #fff;
             }
             .error {
                 color: #ff6b6b;
@@ -156,6 +178,7 @@
             <form action="/reset" method="GET">
                 <button type="submit" class="reset-btn">Start New Budget</button>
             </form>
+            <a href="/logout" class="logout-btn">Logout</a>
         </div>
         {% else %}
         <div class="glass-container">
@@ -175,6 +198,7 @@
             <form action="/reset" method="GET">
                 <button type="submit" class="reset-btn">Reset Budget</button>
             </form>
+            <a href="/logout" class="logout-btn">Logout</a>
         </div>
         {% endif %}
     </body>
