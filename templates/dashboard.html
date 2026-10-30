@@ -1,204 +1,328 @@
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Expense Tracker Dashboard</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 20px;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #1f4068, #162447, #1b1b2f);                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 20px;
-                color: #fff;
-                box-sizing: border-box;
-            }
-            .glass-container {
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 16px;
-                padding: 30px;
-                width: 380px;
-                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-                box-sizing: border-box;
-                z-index: 1;
-                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            }
-            .glass-container:hover {
-                transform: translateY(-5px);
-                border-color: rgba(0, 240, 255, 0.4);
-                box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.15);
-            }
-            h1, h3 {
-                text-align: center;
-            }
-            .remaining {
-                text-align: center;
-                color: #ffd000;
-                font-weight: bold;
-                margin-bottom: 20px;
-            }
-            input {
-                width: 100%;
-                padding: 12px;
-                margin: 10px 0;
-                background: rgba(255, 255, 255, 0.07);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 8px;
-                color: #fff;
-                font-size: 15px;
-                box-sizing: border-box;
-            }
-            button {
-                width: 100%;
-                padding: 12px;
-                margin-top: 10px;
-                background: #00b4d8;
-                border: none;
-                border-radius: 8px;
-                color: #fff;
-                font-weight: bold;
-                font-size: 15px;
-                cursor: pointer;
-            }
-            button:hover {
-                background: #0096c7;
-            }
-            .reset-btn {
-                background: #ff6b6b;
-            }
-            .reset-btn:hover {
-                background: #fa5252;
-            }
-            .logout-btn {
-                display: block;
-                width: 100%;
-                padding: 12px;
-                margin-top: 10px;
-                text-align: center;
-                color: #ff6b6b;
-                text-decoration: none;
-                border: 1px solid rgba(255, 107, 107, 0.4);
-                border-radius: 8px;
-                background: rgba(255, 255, 255, 0.05);
-                font-weight: bold;
-                font-size: 15px;
-                box-sizing: border-box;
-                transition: all 0.3s ease;
-            }
-            .logout-btn:hover {
-                border-color: #ff4757;
-                box-shadow: 0 0 12px rgba(255, 71, 87, 0.4);
-                background: rgba(255, 71, 87, 0.15);
-                color: #fff;
-            }
-            .error {
-                color: #ff6b6b;
-                text-align: center;
-                font-size: 14px;
-                margin-top: 10px;
-            }
-            .exhausted-banner {
-                color: #ff6b6b;
-                text-align: center;
-                font-weight: bold;
-                margin-bottom: 15px;
-                font-size: 16px;
-            }
-            .ticker-wrap {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                overflow: hidden;
-                z-index: -1;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-                opacity: 0.03;
-                pointer-events: none;
-            }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker Dashboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-            .ticker-row {
-                display: flex;
-                white-space: nowrap;
-                font-size: 8vw;
-                font-weight: bold;
-                text-transform: uppercase;
-            }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d1326;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            padding: 30px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-            .row-1 .ticker-text {
-                display: inline-block;
-                animation: scrollLeft 25s linear infinite;
-            }
+        /* --- CURSOR SPOTLIGHT EFFECT --- */
+        .cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.16) 0%, rgba(114, 9, 183, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
 
-            .row-2 .ticker-text {
-                display: inline-block;
-                animation: scrollRight 25s linear infinite;
-            }
+        /* --- LIQUID BACKGROUND & DIAGONAL GRADIENT --- */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            background: linear-gradient(135deg, #131a35 0%, #0f172a 50%, #17153b 100%);
+        }
 
-            @keyframes scrollLeft {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-            }
+        .hero-diagonal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 78vh;
+            background: linear-gradient(135deg, rgba(58, 12, 163, 0.55) 0%, rgba(67, 97, 238, 0.45) 50%, rgba(0, 240, 255, 0.35) 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+            z-index: -1;
+            backdrop-filter: blur(20px);
+        }
 
-            @keyframes scrollRight {
-                0% { transform: translateX(-50%); }
-                100% { transform: translateX(0); }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="ticker-wrap">
-            <div class="ticker-row row-1">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
-            <div class="ticker-row row-2">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
-            <div class="ticker-row row-1">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
+        .blob {
+            position: absolute;
+            filter: blur(70px);
+            border-radius: 50%;
+            opacity: 0.55;
+            animation: floatBlob 14s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { width: 420px; height: 420px; background: #4361ee; top: -100px; left: -100px; }
+        .blob-2 { width: 380px; height: 380px; background: #00f0ff; top: 15%; right: -80px; animation-delay: -4s; }
+        .blob-3 { width: 320px; height: 320px; background: #7209b7; bottom: 5%; left: 30%; animation-delay: -8s; }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 40px) scale(1.15); }
+        }
+
+        /* --- BACKGROUND TICKER --- */
+        .ticker-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            opacity: 0.025;
+            pointer-events: none;
+        }
+
+        .ticker-row {
+            display: flex;
+            white-space: nowrap;
+            font-size: 8vw;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .row-1 .ticker-text { display: inline-block; animation: scrollLeft 25s linear infinite; }
+        .row-2 .ticker-text { display: inline-block; animation: scrollRight 25s linear infinite; }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* --- LIQUID GLASS CARDS --- */
+        .glass-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            border-left: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 32px 28px;
+            width: 390px;
+            max-width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45), inset 0 0 25px rgba(255, 255, 255, 0.05);
+            z-index: 2;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-container:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 240, 255, 0.55);
+            box-shadow: 0 30px 60px rgba(0, 240, 255, 0.2), inset 0 0 30px rgba(0, 240, 255, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            background: linear-gradient(90deg, #fff, #00f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h3 {
+            text-align: center;
+            letter-spacing: 1px;
+            font-size: 16px;
+            color: #00f0ff;
+        }
+
+        .remaining {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 208, 0, 0.35);
+            border-radius: 12px;
+            padding: 12px;
+            color: #ffd000;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px 15px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input:focus {
+            border-color: #00f0ff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            background: linear-gradient(135deg, #00e676, #00b4d8);
+            border: none;
+            border-radius: 10px;
+            color: #0d1326;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 230, 118, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 240, 255, 0.5);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 12px 30px rgba(255, 71, 87, 0.55);
+        }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            text-align: center;
+            color: #ff6b6b;
+            text-decoration: none;
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: bold;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: #ff4757;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.4);
+            background: rgba(255, 71, 87, 0.15);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .exhausted-banner {
+            color: #ff6b6b;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="hero-diagonal"></div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker-row row-1">
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
         </div>
-        {% if is_exhausted %}
-        <div class="glass-container">
-            <h1>Budget Exhausted!</h1>
-            <div class="exhausted-banner">You've spent all your funds. Here is your final summary:</div>
-            <div style="margin-bottom: 20px; line-height: 1.6;">{{ formatted_history | safe }}</div>
-            <form action="/reset" method="GET">
-                <button type="submit" class="reset-btn">Start New Budget</button>
-            </form>
-            <a href="/logout" class="logout-btn">Logout</a>
+        <div class="ticker-row row-2">
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
         </div>
-        {% else %}
-        <div class="glass-container">
-            <h1>Expense Tracker</h1>
-            <div class="remaining">Remaining: ₦{{ budget }}</div>
-            <form method="POST">
-                <input type="text" name="item" placeholder="Expense name" required>
-                <input type="number" name="cost" placeholder="Cost" required>
-                <button type="submit">Add Expense</button>
-            </form>
-            <div class="error">{{ error_message }}</div>
-        </div>
+    </div>
 
-        <div class="glass-container">
-            <h3 style="margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">EXPENSE HISTORY</h3>
-            <div style="margin-bottom: 15px; line-height: 1.6;">{{ formatted_history | safe }}</div>
-            <form action="/reset" method="GET">
-                <button type="submit" class="reset-btn">Reset Budget</button>
-            </form>
-            <a href="/logout" class="logout-btn">Logout</a>
-        </div>
-        {% endif %}
-    </body>
+    {% if is_exhausted %}
+    <div class="glass-container">
+        <h1>Budget Exhausted!</h1>
+        <div class="exhausted-banner">You've spent all your funds. Here is your final summary:</div>
+        <div style="margin-bottom: 20px; line-height: 1.7; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px;">{{ formatted_history | safe }}</div>
+        <form action="/reset" method="GET">
+            <button type="submit" class="reset-btn">Start New Budget</button>
+        </form>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    {% else %}
+    <div class="glass-container">
+        <h1>Expense Tracker</h1>
+        <div class="remaining">Remaining: ₦{{ budget }}</div>
+        <form method="POST">
+            <input type="text" name="item" placeholder="Expense name" required>
+            <input type="number" name="cost" placeholder="Cost (₦)" required>
+            <button type="submit">Add Expense</button>
+        </form>
+        <div class="error">{{ error_message }}</div>
+    </div>
+
+    <div class="glass-container">
+        <h3 style="margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 10px;">EXPENSE HISTORY</h3>
+        <div style="margin-bottom: 15px; line-height: 1.7;">{{ formatted_history | safe }}</div>
+        <form action="/reset" method="GET">
+            <button type="submit" class="reset-btn">Reset Budget</button>
+        </form>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    {% endif %}
+
+    <script>
+        const cursorGlow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
 </html>
