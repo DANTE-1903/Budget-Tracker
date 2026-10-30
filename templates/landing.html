@@ -1,183 +1,650 @@
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome | Expense Tracker</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 20px;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background: linear-gradient(135deg, #1f4068, #162447, #1b1b2f);
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                color: #fff;
-                box-sizing: border-box;
-            }
-            .glass-container {
-                background: rgba(255, 255, 255, 0.05);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 16px;
-                padding: 35px 30px;
-                width: 400px;
-                max-width: 100%;
-                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-                box-sizing: border-box;
-                z-index: 1;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Smart Expense Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d1326;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* --- CURSOR SPOTLIGHT EFFECT --- */
+        .cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.16) 0%, rgba(114, 9, 183, 0.08) 40%, transparent 70%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        /* --- LIQUID BACKGROUND BLOBS --- */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+            background: linear-gradient(135deg, #131a35 0%, #0f172a 50%, #17153b 100%);
+        }
+
+        /* Diagonal Hero Backdrop matching the screenshot */
+        .hero-diagonal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 78vh;
+            background: linear-gradient(135deg, rgba(58, 12, 163, 0.55) 0%, rgba(67, 97, 238, 0.45) 50%, rgba(0, 240, 255, 0.35) 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+            z-index: -1;
+            backdrop-filter: blur(20px);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(70px);
+            border-radius: 50%;
+            opacity: 0.55;
+            animation: floatBlob 14s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 420px;
+            height: 420px;
+            background: #4361ee;
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 380px;
+            height: 380px;
+            background: #00f0ff;
+            top: 15%;
+            right: -80px;
+            animation-delay: -4s;
+        }
+
+        .blob-3 {
+            width: 320px;
+            height: 320px;
+            background: #7209b7;
+            bottom: 5%;
+            left: 30%;
+            animation-delay: -8s;
+        }
+
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 40px) scale(1.15); }
+        }
+
+        /* --- BACKGROUND TICKER --- */
+        .ticker-wrap {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            opacity: 0.025;
+            pointer-events: none;
+        }
+
+        .ticker-row {
+            display: flex;
+            white-space: nowrap;
+            font-size: 8vw;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .row-1 .ticker-text { display: inline-block; animation: scrollLeft 25s linear infinite; }
+        .row-2 .ticker-text { display: inline-block; animation: scrollRight 25s linear infinite; }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* --- LIQUID GLASS NAVBAR --- */
+        nav {
+            max-width: 1200px;
+            margin: 20px auto 0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #00f0ff, #00e676);
+            color: #0d1326;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #00f0ff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #00f0ff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: #00f0ff;
+            color: #0d1326;
+            border-color: #00f0ff;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* --- SPLIT HERO SECTION --- */
+        .hero {
+            max-width: 1200px;
+            margin: 50px auto 60px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text h1 {
+            font-size: 46px;
+            line-height: 1.18;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-text h1 span {
+            background: linear-gradient(90deg, #00f0ff, #72efdd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            font-size: 17px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 35px;
+            max-width: 520px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 15px 34px;
+            background: linear-gradient(135deg, #00e676, #00b4d8);
+            border: none;
+            border-radius: 10px;
+            color: #0d1326;
+            font-weight: 800;
+            font-size: 15px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 8px 25px rgba(0, 230, 118, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 240, 255, 0.55);
+        }
+
+        .btn-glass {
+            padding: 15px 34px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: #162447;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25);
+        }
+
+        /* --- 3D ISOMETRIC LIQUID GLASS SHOWCASE (RIGHT SIDE) --- */
+        .hero-visual {
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .iso-card {
+            width: 100%;
+            max-width: 430px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.45);
+            border-left: 1px solid rgba(255, 255, 255, 0.45);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45), inset 0 0 25px rgba(255, 255, 255, 0.05);
+            transform: rotateY(-12deg) rotateX(8deg);
+            transition: transform 0.2s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
+        }
+
+        .iso-card:hover {
+            border-color: rgba(0, 240, 255, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 240, 255, 0.2), inset 0 0 30px rgba(0, 240, 255, 0.1);
+        }
+
+        .mock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+        .dot.r { background: #ff5f56; }
+        .dot.y { background: #ffbd2e; }
+        .dot.g { background: #27c93f; }
+
+        .mock-balance {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 208, 0, 0.35);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+
+        .mock-balance span {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mock-balance h2 {
+            font-size: 32px;
+            color: #ffd000;
+            margin-top: 5px;
+        }
+
+        .mock-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mock-item {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .mock-item:hover {
+            transform: translateX(6px);
+            background: rgba(0, 240, 255, 0.12);
+            border-color: rgba(0, 240, 255, 0.4);
+        }
+
+        .mock-badge {
+            position: absolute;
+            bottom: -18px;
+            right: -18px;
+            background: linear-gradient(135deg, #00b4d8, #4361ee);
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        /* --- BOTTOM 3-COLUMN FEATURE CARDS --- */
+        .features-section {
+            max-width: 1200px;
+            margin: 40px auto 60px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 240, 255, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.15);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(0, 240, 255, 0.05));
+        }
+
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: rgba(0, 230, 118, 0.12);
+            border: 1px solid rgba(0, 230, 118, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #00e676;
+            transition: all 0.35s ease;
+        }
+
+        .feature-card:hover .icon-circle {
+            background: #00e676;
+            color: #0d1326;
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.6);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* --- RESPONSIVE DESIGN FOR MOBILE --- */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
                 text-align: center;
-                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+                margin-top: 30px;
             }
-            .glass-container:hover {
-                transform: translateY(-5px);
-                border-color: rgba(0, 240, 255, 0.4);
-                box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.15);
+            .hero-text p {
+                margin: 0 auto 30px;
             }
-            .badge {
-                display: inline-block;
-                padding: 5px 12px;
-                background: rgba(0, 180, 216, 0.15);
-                border: 1px solid rgba(0, 240, 255, 0.3);
-                border-radius: 20px;
-                color: #00f0ff;
-                font-size: 12px;
-                font-weight: bold;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-                margin-bottom: 15px;
+            .hero-buttons {
+                justify-content: center;
             }
-            h1 {
-                font-size: 28px;
-                margin: 0 0 12px 0;
+            .nav-links {
+                display: none;
             }
-            .subtitle {
-                color: rgba(255, 255, 255, 0.75);
-                font-size: 15px;
-                line-height: 1.5;
-                margin-bottom: 25px;
+            .features-section {
+                grid-template-columns: 1fr;
             }
-            .feature-list {
-                text-align: left;
-                margin-bottom: 25px;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
+            .iso-card {
+                transform: none;
             }
-            .feature-item {
-                background: rgba(255, 255, 255, 0.04);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 10px;
-                padding: 12px 15px;
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-            .feature-icon {
-                color: #ffd000;
-                font-weight: bold;
-                font-size: 16px;
-            }
-            .cta-btn {
-                display: block;
-                width: 100%;
-                padding: 14px;
-                background: #00b4d8;
-                border: none;
-                border-radius: 8px;
-                color: #fff;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 16px;
-                box-sizing: border-box;
-                transition: all 0.3s ease;
-            }
-            .cta-btn:hover {
-                background: #0096c7;
-                box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
-            }
+        }
+    </style>
+</head>
+<body>
 
-            .ticker-wrap {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                overflow: hidden;
-                z-index: -1;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-                opacity: 0.03;
-                pointer-events: none;
-            }
-            .ticker-row {
-                display: flex;
-                white-space: nowrap;
-                font-size: 8vw;
-                font-weight: bold;
-                text-transform: uppercase;
-            }
-            .row-1 .ticker-text {
-                display: inline-block;
-                animation: scrollLeft 25s linear infinite;
-            }
-            .row-2 .ticker-text {
-                display: inline-block;
-                animation: scrollRight 25s linear infinite;
-            }
-            @keyframes scrollLeft {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-            }
-            @keyframes scrollRight {
-                0% { transform: translateX(-50%); }
-                100% { transform: translateX(0); }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="ticker-wrap">
-            <div class="ticker-row row-1">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
-            <div class="ticker-row row-2">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
-            <div class="ticker-row row-1">
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
-            </div>
+    <!-- Interactive Cursor Glow -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Liquid Background & Diagonal Hero Cut -->
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="hero-diagonal"></div>
+    </div>
+
+    <!-- Scrolling Background Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker-row row-1">
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
         </div>
+        <div class="ticker-row row-2">
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+        </div>
+    </div>
 
-        <div class="glass-container">
-            <div class="badge">Personal Finance</div>
-            <h1>Smart Expense Tracker</h1>
-            <p class="subtitle">
-                Take full control of your Naira. Set your target budget, log daily expenses in real-time, and stay on top of your spending.
+    <!-- Top Liquid Glass Navbar -->
+    <nav>
+        <a href="/" class="logo">
+            <div class="logo-icon">₦</div>
+            <span>SpendWise</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="/login">Dashboard</a></li>
+            <li><a href="/login">Account</a></li>
+        </ul>
+        <a href="/login" class="nav-btn">LOGIN →</a>
+    </nav>
+
+    <!-- Split Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Handcrafted Budget Control <span>For Your Naira</span></h1>
+            <p>
+                Set your target budget, log daily expenses in real-time, and watch your balance update automatically.
             </p>
-
-            <div class="feature-list">
-                <div class="feature-item">
-                    <span class="feature-icon">₦</span>
-                    <span>Set custom budgets and track remaining funds</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">⚡</span>
-                    <span>Instant overdraft alerts and spending history</span>
-                </div>
-                <div class="feature-item">
-                    <span class="feature-icon">🔒</span>
-                    <span>Password-protected personal session</span>
-                </div>
+            <div class="hero-buttons">
+                <a href="/login" class="btn-primary">Get Started</a>
+                <a href="#features" class="btn-glass">Explore Features</a>
             </div>
-
-            <a href="/login" class="cta-btn">Get Started →</a>
         </div>
-    </body>
+
+        <!-- 3D Isometric Glass Dashboard Preview -->
+        <div class="hero-visual">
+            <div class="iso-card" id="tiltCard">
+                <div class="mock-header">
+                    <div class="dots">
+                        <div class="dot r"></div>
+                        <div class="dot y"></div>
+                        <div class="dot g"></div>
+                    </div>
+                    <span style="font-size: 12px; color: rgba(255,255,255,0.6);">LIVE PREVIEW</span>
+                </div>
+                <div class="mock-balance">
+                    <span>Remaining Balance</span>
+                    <h2>₦45,500</h2>
+                </div>
+                <div class="mock-bars">
+                    <div class="mock-item">
+                        <span>⚡ Mobile Data Plan</span>
+                        <strong style="color: #ff6b6b;">-₦5,000</strong>
+                    </div>
+                    <div class="mock-item">
+                        <span>🍱 Lunch & Groceries</span>
+                        <strong style="color: #ff6b6b;">-₦3,500</strong>
+                    </div>
+                    <div class="mock-item">
+                        <span>🚌 Transport Fare</span>
+                        <strong style="color: #ff6b6b;">-₦1,000</strong>
+                    </div>
+                </div>
+                <div class="mock-badge">✓ Instant Overdraft Protection</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom 3-Column Feature Cards (Matches Screenshot Bottom Row) -->
+    <section class="features-section" id="features">
+        <div class="feature-card">
+            <div class="icon-circle">⚙️</div>
+            <h3>Custom Budget Setup</h3>
+            <p>Initialize your starting Naira budget in seconds and reset your counter whenever a new spending cycle begins.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon-circle">⚡</div>
+            <h3>Real-Time Deductions</h3>
+            <p>Every logged item automatically calculates against your balance and blocks expenses that exceed your remaining funds.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon-circle">🔒</div>
+            <h3>Protected Sessions</h3>
+            <p>Your username, password, and active expense history stay locked to your personal session until you log out.</p>
+        </div>
+    </section>
+
+    <!-- Interactive Cursor & 3D Tilt Script -->
+    <script>
+        const cursorGlow = document.getElementById('cursorGlow');
+        const tiltCard = document.getElementById('tiltCard');
+
+        document.addEventListener('mousemove', (e) => {
+            // Move the liquid spotlight with the cursor
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+
+            // Subtle 3D tilt effect on the right-side glass card based on mouse position
+            if (window.innerWidth > 900) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 35;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 35;
+                tiltCard.style.transform = `rotateY(${xAxis - 8}deg) rotateX(${yAxis + 5}deg)`;
+            }
+        });
+    </script>
+</body>
 </html>
