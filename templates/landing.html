@@ -1,0 +1,183 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome | Expense Tracker</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 20px;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #1f4068, #162447, #1b1b2f);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+                box-sizing: border-box;
+            }
+            .glass-container {
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 16px;
+                padding: 35px 30px;
+                width: 400px;
+                max-width: 100%;
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+                box-sizing: border-box;
+                z-index: 1;
+                text-align: center;
+                transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            }
+            .glass-container:hover {
+                transform: translateY(-5px);
+                border-color: rgba(0, 240, 255, 0.4);
+                box-shadow: 0 12px 40px 0 rgba(0, 240, 255, 0.15);
+            }
+            .badge {
+                display: inline-block;
+                padding: 5px 12px;
+                background: rgba(0, 180, 216, 0.15);
+                border: 1px solid rgba(0, 240, 255, 0.3);
+                border-radius: 20px;
+                color: #00f0ff;
+                font-size: 12px;
+                font-weight: bold;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                margin-bottom: 15px;
+            }
+            h1 {
+                font-size: 28px;
+                margin: 0 0 12px 0;
+            }
+            .subtitle {
+                color: rgba(255, 255, 255, 0.75);
+                font-size: 15px;
+                line-height: 1.5;
+                margin-bottom: 25px;
+            }
+            .feature-list {
+                text-align: left;
+                margin-bottom: 25px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .feature-item {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 10px;
+                padding: 12px 15px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .feature-icon {
+                color: #ffd000;
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .cta-btn {
+                display: block;
+                width: 100%;
+                padding: 14px;
+                background: #00b4d8;
+                border: none;
+                border-radius: 8px;
+                color: #fff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 16px;
+                box-sizing: border-box;
+                transition: all 0.3s ease;
+            }
+            .cta-btn:hover {
+                background: #0096c7;
+                box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
+            }
+
+            .ticker-wrap {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                overflow: hidden;
+                z-index: -1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                opacity: 0.03;
+                pointer-events: none;
+            }
+            .ticker-row {
+                display: flex;
+                white-space: nowrap;
+                font-size: 8vw;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            .row-1 .ticker-text {
+                display: inline-block;
+                animation: scrollLeft 25s linear infinite;
+            }
+            .row-2 .ticker-text {
+                display: inline-block;
+                animation: scrollRight 25s linear infinite;
+            }
+            @keyframes scrollLeft {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-50%); }
+            }
+            @keyframes scrollRight {
+                0% { transform: translateX(-50%); }
+                100% { transform: translateX(0); }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ticker-wrap">
+            <div class="ticker-row row-1">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
+            <div class="ticker-row row-2">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
+            <div class="ticker-row row-1">
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+                <div class="ticker-text">EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • EXPENSE TRACKER • &nbsp;</div>
+            </div>
+        </div>
+
+        <div class="glass-container">
+            <div class="badge">Personal Finance</div>
+            <h1>Smart Expense Tracker</h1>
+            <p class="subtitle">
+                Take full control of your Naira. Set your target budget, log daily expenses in real-time, and stay on top of your spending.
+            </p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">₦</span>
+                    <span>Set custom budgets and track remaining funds</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span>Instant overdraft alerts and spending history</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔒</span>
+                    <span>Password-protected personal session</span>
+                </div>
+            </div>
+
+            <a href="/login" class="cta-btn">Get Started →</a>
+        </div>
+    </body>
+</html>

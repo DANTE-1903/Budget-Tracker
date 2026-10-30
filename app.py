@@ -26,10 +26,11 @@ def login():
         else:
             error_message = "Please fill in the empty fields"
     return render_template("login.html", error_message=error_message)
+
 @app.route("/", methods=["GET", "POST"]) #it tells flask to run this function when visiting the homepage, looking out for both page loads (GET) and form submissions (POST) 
 def home():
     if "username" not in session:
-        return redirect("/login")
+        return render_template("landing.html")
     if "budget" not in session:
         session["budget"] = 0
     if "expenses" not in session:
@@ -61,6 +62,8 @@ def home():
                                 error_message = session ["error_message"],
                                 formatted_history=formatted_history,
                                 is_exhausted=(session["budget"] == 0))
+
+
 @app.route("/reset")
 def reset():
     session["budget"] = 0
@@ -72,7 +75,7 @@ def reset():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/login")
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
