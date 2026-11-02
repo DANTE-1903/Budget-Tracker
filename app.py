@@ -1,4 +1,5 @@
-from flask import Flask, request, render_template, session, redirect #import flask to run the web server and 'request' to catch form data sent by the user
+from flask import Flask, request, render_template, session, redirect 
+from datetime import datetime #import flask to run the web server and 'request' to catch form data sent by the user
 
 app = Flask(__name__) #initialize flask application
 
@@ -51,7 +52,8 @@ def home():
                 session["error_message"] = ""
                 session["budget"] = session["budget"] - cost
                 temp_expenses = session["expenses"]
-                temp_expenses.append(f"{item}-{cost}")
+                time_stamp = datetime.now().strftime("%b %d, %Y | %I:%M %p")
+                temp_expenses.append(f"[{time_stamp}] {item}: ₦{cost}")
                 session["expenses"] = temp_expenses
     formatted_history = "<br>".join(session["expenses"])
     if session["budget"] == 0 and not session["expenses"]:
