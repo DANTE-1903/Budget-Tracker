@@ -53,7 +53,7 @@ def home():
                 session["budget"] = session["budget"] - cost
                 temp_expenses = session["expenses"]
                 time_stamp = datetime.now(timezone(timedelta(hours=1))).strftime("%b %d, %Y | %I:%M %p")
-                temp_expenses.append(f"[{time_stamp}] {item}: ₦{cost}")
+                temp_expenses.append(f"[{time_stamp}]-------{item}: ₦{cost}")
                 session["expenses"] = temp_expenses
     formatted_history = "<br>".join(session["expenses"])
     if session["budget"] == 0 and not session["expenses"]:
