@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, session, redirect 
-from datetime import datetime #import flask to run the web server and 'request' to catch form data sent by the user
+from datetime import datetime, timezone, timedelta #import flask to run the web server and 'request' to catch form data sent by the user
 
 app = Flask(__name__) #initialize flask application
 
@@ -52,7 +52,7 @@ def home():
                 session["error_message"] = ""
                 session["budget"] = session["budget"] - cost
                 temp_expenses = session["expenses"]
-                time_stamp = datetime.now().strftime("%b %d, %Y | %I:%M %p")
+                time_stamp = datetime.now(timezone(timedelta(hours=1))).strftime("%b %d, %Y | %I:%M %p")
                 temp_expenses.append(f"[{time_stamp}] {item}: ₦{cost}")
                 session["expenses"] = temp_expenses
     formatted_history = "<br>".join(session["expenses"])
