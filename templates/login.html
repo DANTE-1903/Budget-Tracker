@@ -25,7 +25,6 @@
             position: relative;
         }
 
-        /* --- CURSOR SPOTLIGHT EFFECT --- */
         .cursor-glow {
             position: fixed;
             width: 500px;
@@ -37,7 +36,6 @@
             z-index: 0;
         }
 
-        /* --- LIQUID BACKGROUND & DIAGONAL GRADIENT --- */
         .liquid-bg {
             position: fixed;
             top: 0;
@@ -78,7 +76,6 @@
             100% { transform: translate(50px, 40px) scale(1.15); }
         }
 
-        /* --- BACKGROUND TICKER --- */
         .ticker-wrap {
             position: fixed;
             top: 0;
@@ -114,7 +111,6 @@
             100% { transform: translateX(0); }
         }
 
-        /* --- LIQUID GLASS CARD --- */
         .glass-container {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
             backdrop-filter: blur(20px);
@@ -246,13 +242,14 @@
 
     <div class="glass-container">
         <h1>Welcome Back</h1>
-        <p class="subtitle">Log in or enter a new username to register</p>
+        <p class="subtitle">Log in to your account</p>
         <form method="POST">
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Continue →</button>
         </form>
         <div class="error">{{ error_message }}</div>
+        <a href="/signup" class="back-link">Don't have an account? Sign up</a>
         <a href="/" class="back-link">← Back to Home</a>
     </div>
 

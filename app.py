@@ -7,6 +7,24 @@ app.secret_key = "secret_key 1903" #global lists for budget, expenses and error 
 
 users = {} #stores users credentials
 
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    error_message = ""
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if username and password:
+            if username in users:
+                error_message = "Username already taken! Please log in."
+            else:
+                users[username] = password
+                session["username"] = username
+                return redirect("/")
+        else:
+            error_message = "Please fill in the fields"
+    return render_template("signup.html", error_message=error_message)
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error_message = ""
@@ -21,9 +39,7 @@ def login():
                 else:
                     error_message = "Incorrect password"
             else:
-                users[username] = password
-                session["username"] = username
-                return redirect("/")
+                error_message = "Account not found. Please sign up!"
         else:
             error_message = "Please fill in the empty fields"
     return render_template("login.html", error_message=error_message)
